@@ -1,6 +1,6 @@
 #include "Util.h"
 
-size_t lenCommandLineArg(char* str)
+size_t lenCommandLineArg(const char* arg)
 {
     size_t i = 0;
     char currentChar = arg[i];
@@ -13,4 +13,13 @@ size_t lenCommandLineArg(char* str)
 
     i++;
     return i;
+}
+
+void printCommandLineArgs(const Args* args)
+{
+    printf("Access control list: %s\n", args->accessControlList);
+    printf("Log file: %s\n", args->logFile);
+    printf("IP address: %s\n", args->ip);
+    printf("Help: %d\n", args->help);
+
 }
