@@ -8,15 +8,8 @@
 
 #include "Util.h"
 
-typedef struct
-{
-    char* accessControlList;
-    char* logFile;
-    char* ip;
-    int help; // 0 means no help, 1 means help
-}Args;
-
 void runOneArg();
+void runBadArgs(int badFile, int badArgs);
 void runHelp();
 Args* verifyArgs(int argc, char** argv);
 

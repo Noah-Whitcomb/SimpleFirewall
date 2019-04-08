@@ -1,7 +1,9 @@
 #ifndef NETWORKINGFINAL_UTIL_H
 #define NETWORKINGFINAL_UTIL_H
 
-#include "PreProcessing.h"
+#include "Structs.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 // return length of string that has decayed to a pointer
 // including null terminator

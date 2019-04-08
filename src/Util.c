@@ -17,8 +17,6 @@ size_t lenCommandLineArg(const char* arg)
 
 void printCommandLineArgs(const Args* args)
 {
-    printf("Access control list: %s\n", args->accessControlList);
-    printf("Log file: %s\n", args->logFile);
     printf("IP address: %s\n", args->ip);
     printf("Help: %d\n", args->help);
 
