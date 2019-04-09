@@ -3,6 +3,6 @@
 void freeArgs(Args* args)
 {
     free(args->ip);
-
+    free(args->portList);
     free(args);
 }

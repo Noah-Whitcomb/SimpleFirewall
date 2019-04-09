@@ -22,7 +22,7 @@ Args* verifyArgs(int argc, char** argv)
     {
         if(strcmp(argv[i],"-a") == 0)
         {
-            args->accList = fopen(argv[i+1], "a");
+            args->accList = fopen(argv[i+1], "rb");
             if(args->accList == NULL)
             {
                 free(args);
@@ -85,6 +85,11 @@ Args* verifyArgs(int argc, char** argv)
         }
     }
 
+    if(!parseAccList(args, args->accList))
+    {
+        badFile = 1;
+    }
+
     if(badFile || badArgs)
     {
         runBadArgs(badFile, badArgs);
@@ -127,6 +132,38 @@ void runBadArgs(int badFile, int badArgs)
     {
         printf("Bad command line arguments, try again.\n");
     }
+}
+
+int parseAccList(Args* args, FILE* f)
+{
+    if(args->rangeOrList == 1)
+    {
+        return parseList(args, f);
+    }
+    else
+    {
+        return parseRange(args, f);
+    }
+}
+
+int parseRange(Args* args, FILE* f)
+{
+    args->portLowBound = getIntFromFile(f);
+    args->portUpBound = getIntFromFile(f);
+    if(args->portLowBound < 0 || args->portUpBound < 0)
+    {
+        // this is a failure
+        return 0;
+    }
+
+    printf("port lower bound: %d\n",args->portLowBound);
+    printf("port upper bound: %d\n", args->portUpBound);
+    return 1;
+}
+
+int parseList(Args* args, FILE* f)
+{
+
 }
 
 void runHelp()

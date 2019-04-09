@@ -3,14 +3,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 typedef struct
 {
     FILE* accList;
     FILE* logFile;
     char* ip;
-    size_t help; // 0 means no help, 1 means help
-    size_t rangeOrList; // 0 means range, 1 means list
+    int help; // 0 means no help, 1 means help
+    int rangeOrList; // 0 means range, 1 means list
+    int portLowBound; //lower bound of port range
+    int portUpBound; // upper bound of port range
+    int* portList;
 }Args;
 
 void freeArgs(Args* args);
