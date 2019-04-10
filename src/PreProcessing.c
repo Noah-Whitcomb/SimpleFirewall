@@ -18,72 +18,7 @@ Args* verifyArgs(int argc, char** argv)
         return NULL;
     }
 
-    for(size_t i = 1; i<argc; i++)
-    {
-        if(strcmp(argv[i],"-a") == 0)
-        {
-            args->accList = fopen(argv[i+1], "rb");
-            if(args->accList == NULL)
-            {
-                free(args);
-                badFile = 1;
-            }
-            i++;
-        }
-        else if(strcmp(argv[i],"-log") == 0)
-        {
-            args->logFile = fopen(argv[i+1], "a");
-            if(args->logFile == NULL)
-            {
-                free(args);
-                badFile = 1;
-            }
-            i++;
-        }
-        else if(strcmp(argv[i],"-logN") == 0)
-        {
-            args->logFile = fopen(argv[i+1], "w");
-            if(args->logFile == NULL)
-            {
-                free(args);
-                badFile = 1;
-            }
-            i++;
-        }
-        else if(strcmp(argv[i],"-h") == 0)
-        {
-            args->help = 1;
-        }
-        else if(strcmp(argv[i],"-l") == 0)
-        {
-            args->ip = (char*)malloc(11*sizeof(char));
-            strcpy(args->ip, "localhost");
-        }
-        else if(strcmp(argv[i],"-ip") == 0)
-        {
-            args->ip = argv[i+1];
-        }
-        else if(strcmp(argv[i],"-list") == 0)
-        {
-            if(args->rangeOrList == 1 || args->rangeOrList == 0)
-            {
-                badArgs = 1;
-            }
-            args->rangeOrList = 1;
-        }
-        else if(strcmp(argv[i],"-range") == 0)
-        {
-            if(args->rangeOrList == 1 || args->rangeOrList == 0)
-            {
-                badArgs = 1;
-            }
-            args->rangeOrList = 0;
-        }
-        else
-        {
-            badArgs = 1;
-        }
-    }
+    getArgs(args, argc, argv, &badFile, &badArgs);
 
     if(!parseAccList(args, args->accList))
     {
@@ -148,22 +83,102 @@ int parseAccList(Args* args, FILE* f)
 
 int parseRange(Args* args, FILE* f)
 {
-    args->portLowBound = getIntFromFile(f);
-    args->portUpBound = getIntFromFile(f);
-    if(args->portLowBound < 0 || args->portUpBound < 0)
+    // lets just say that no more error checking is needed
+    fscanf(f,"%d - %d", &args->portLowBound, &args->portUpBound);
+    if(args->portLowBound < 0 || args->portUpBound < 0 || args->portUpBound > 1000000 || args->portLowBound > 1000000)
     {
         // this is a failure
         return 0;
     }
 
-    printf("port lower bound: %d\n",args->portLowBound);
-    printf("port upper bound: %d\n", args->portUpBound);
+    printf("%d %d\n",args->portLowBound,args->portUpBound);
+
     return 1;
 }
 
 int parseList(Args* args, FILE* f)
 {
+    fscanf(f, "size: %d\n",&args->portListSize);
+    args->portList = (int*)malloc(sizeof(int)*args->portListSize);
 
+    char temp[10];
+    fscanf(f,"%s ",temp);
+
+    for(int i = 0; i < args->portListSize-1; i++)
+    {
+        fscanf(f,"%d ", &args->portList[i]);
+    }
+    fscanf(f,"%d", &args->portList[args->portListSize-1]);
+}
+
+void getArgs(Args* args, int argc, char** argv, int *badFile, int* badArgs)
+{
+    for(size_t i = 1; i<argc; i++)
+    {
+        if(strcmp(argv[i],"-a") == 0)
+        {
+            args->accList = fopen(argv[i+1], "rb");
+            if(args->accList == NULL)
+            {
+                free(args);
+                *badFile = 1;
+            }
+            i++;
+        }
+        else if(strcmp(argv[i],"-log") == 0)
+        {
+            args->logFile = fopen(argv[i+1], "a");
+            if(args->logFile == NULL)
+            {
+                free(args);
+                *badFile = 1;
+            }
+            i++;
+        }
+        else if(strcmp(argv[i],"-logN") == 0)
+        {
+            args->logFile = fopen(argv[i+1], "w");
+            if(args->logFile == NULL)
+            {
+                free(args);
+                *badFile = 1;
+            }
+            i++;
+        }
+        else if(strcmp(argv[i],"-h") == 0)
+        {
+            args->help = 1;
+        }
+        else if(strcmp(argv[i],"-l") == 0)
+        {
+            args->ip = (char*)malloc(11*sizeof(char));
+            strcpy(args->ip, "localhost");
+        }
+        else if(strcmp(argv[i],"-ip") == 0)
+        {
+            args->ip = argv[i+1];
+        }
+        else if(strcmp(argv[i],"-list") == 0)
+        {
+            if(args->rangeOrList == 1 || args->rangeOrList == 0)
+            {
+                *badArgs = 1;
+            }
+            args->rangeOrList = 1;
+        }
+        else if(strcmp(argv[i],"-range") == 0)
+        {
+            if(args->rangeOrList == 1 || args->rangeOrList == 0)
+            {
+                *badArgs = 1;
+            }
+            args->rangeOrList = 0;
+        }
+        else
+        {
+            *badArgs = 1;
+        }
+    }
 }
 
 void runHelp()

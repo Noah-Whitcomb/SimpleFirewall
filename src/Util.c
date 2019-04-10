@@ -1,20 +1,6 @@
 #include "Util.h"
 
-size_t lenCommandLineArg(const char* arg)
-{
-    size_t i = 0;
-    char currentChar = arg[i];
-
-    while(currentChar != '\0')
-    {
-        i++;
-        currentChar = arg[i];
-    }
-
-    i++;
-    return i;
-}
-
+//This actually isn't needed because fscanf is apparently a thing
 int getIntFromFile(FILE* f)
 {
     char arr[50];
@@ -27,12 +13,12 @@ int getIntFromFile(FILE* f)
         size++;
     } while(c != 0x20 && c != EOF);
 
-    arr[size] = '\0';
+    arr[size-1] = '\0';
 
     long int result;
     char * errorCheck;
     result = strtol(arr, &errorCheck, 10);
-    if(*errorCheck != 0x20 && *errorCheck != '\0')
+    if(*errorCheck != '\0')
     {
         return -100;
     }

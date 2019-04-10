@@ -4,9 +4,8 @@
 #include "Structs.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
-// return length of string that has decayed to a pointer
-// including null terminator
 int getIntFromFile(FILE* f);
 
 void printCommandLineArgs(const Args* args);

@@ -14,7 +14,8 @@ typedef struct
     int rangeOrList; // 0 means range, 1 means list
     int portLowBound; //lower bound of port range
     int portUpBound; // upper bound of port range
-    int* portList;
+    int* portList; // array of accepted ports
+    int portListSize;
 }Args;
 
 void freeArgs(Args* args);
