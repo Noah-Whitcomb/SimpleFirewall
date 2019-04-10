@@ -13,5 +13,7 @@ int main(int argc, char** argv)
     }
 
     printCommandLineArgs(args);
+    runServer(args);
+    freeArgs(args);
     return 0;
 }

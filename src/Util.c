@@ -1,5 +1,18 @@
 #include "Util.h"
 
+int acceptIP(Args* args, char* ip)
+{
+    int returnval = 1;
+    for(size_t i = 0; i<args->ipListSize; i++)
+    {
+        if(strcmp(args->ipList[i], ip) != 0)
+        {
+            returnval = 0;
+        }
+    }
+    return returnval;
+}
+
 //This actually isn't needed because fscanf is apparently a thing
 int getIntFromFile(FILE* f)
 {
@@ -30,5 +43,11 @@ void printCommandLineArgs(const Args* args)
 {
     printf("IP address: %s\n", args->ip);
     printf("Help: %d\n", args->help);
+    printf("Accepted IP's: ");
+    for(size_t i = 0; i<args->ipListSize; i++)
+    {
+        printf("%s ", args->ipList[i]);
+    }
+    printf("\n");
 
 }

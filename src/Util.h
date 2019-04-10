@@ -10,4 +10,7 @@ int getIntFromFile(FILE* f);
 
 void printCommandLineArgs(const Args* args);
 
+//return 1 if ip accepted, 0 if not
+int acceptIP(Args* args, char* ip);
+
 #endif //NETWORKINGFINAL_UTIL_H
