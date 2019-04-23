@@ -139,22 +139,6 @@ void getArgs(Args* args, int argc, char** argv, int *badFile, int* badArgs)
             args->ip = argv[i+1];
             i++;
         }
-//        else if(strcmp(argv[i],"-list") == 0)
-//        {
-//            if(args->rangeOrList == 1 || args->rangeOrList == 0)
-//            {
-//                *badArgs = 1;
-//            }
-//            args->rangeOrList = 1;
-//        }
-//        else if(strcmp(argv[i],"-range") == 0)
-//        {
-//            if(args->rangeOrList == 1 || args->rangeOrList == 0)
-//            {
-//                *badArgs = 1;
-//            }
-//            args->rangeOrList = 0;
-//        }
         else
         {
             *badArgs = 1;
@@ -167,7 +151,6 @@ void runHelp()
     printf("The following commands are used by this program:\n\n");
     printf("[-h]   the \"help\" command, prints all commands. This one is kind of redundant but oh well.\n\n");
     printf("[-l]   Runs the server on localhost, use this for testing purposes\n\n");
-    //TODO check ip address of server. what is it?
     printf("[-ip]   The next argument is the i.p. address to run the server on. \n\n");
     printf("[-a]   The argument immediately following this one is the path to the access control list.\n");
     printf("\t This is needed every time the program is run\n\n");
@@ -181,33 +164,3 @@ void runHelp()
     printf("[-list]   Using this argument means that the access control list file will consist simply of a list of\n");
     printf("\t accepted ports separated by spaces. So for example, \"5000 5001 5002\" is acceptable.\n\n");
 }
-
-//int parseRange(Args* args, FILE* f)
-//{
-//    // lets just say that no more error checking is needed
-//    fscanf(f,"%d - %d", &args->portLowBound, &args->portUpBound);
-//    if(args->portLowBound < 0 || args->portUpBound < 0 || args->portUpBound > 1000000 || args->portLowBound > 1000000)
-//    {
-//        // this is a failure
-//        return 0;
-//    }
-//
-//    printf("%d %d\n",args->portLowBound,args->portUpBound);
-//
-//    return 1;
-//}
-//
-//int parseList(Args* args, FILE* f)
-//{
-//    fscanf(f, "size: %d\n",&args->portListSize);
-//    args->portList = (int*)malloc(sizeof(int)*args->portListSize);
-//
-//    char temp[10];
-//    fscanf(f,"%s ",temp);
-//
-//    for(int i = 0; i < args->portListSize-1; i++)
-//    {
-//        fscanf(f,"%d ", &args->portList[i]);
-//    }
-//    fscanf(f,"%d", &args->portList[args->portListSize-1]);
-//}

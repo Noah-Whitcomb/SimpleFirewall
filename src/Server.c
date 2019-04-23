@@ -57,7 +57,7 @@ void runServer(Args* args)
 
     SOCKET ClientSocket = INVALID_SOCKET;
     int count = 0;
-    int limit = 10;
+    int limit = 5;
     while(count < limit)
     {
         printf("##################\nListening for connection....\n");
@@ -86,10 +86,29 @@ void runServer(Args* args)
         // assumes connection will be ipv4
         struct sockaddr_in ip_info = (struct sockaddr_in) client_info;
         char *ip = inet_ntoa(ip_info.sin_addr);
-        if (acceptIP(args, ip) == 1)
+        if (!acceptIP(args, ip))
         {
-            printf("connection from %s rejected! attempt logged.", ip);
-            //TODO: write rejected connection to log
+            printf("connection from %s rejected! attempt logged.\n", ip);
+
+            time_t rawtime;
+            struct tm * timeinfo;
+
+            time ( &rawtime );
+            timeinfo = localtime ( &rawtime );
+            fprintf(args->logFile, "################\nREJECTED connection from: %s\n at %s", ip, asctime(timeinfo));
+            fprintf(args->logFile, " at %s", ip, asctime(timeinfo));
+            //TODO fix time log
+
+            iResult = shutdown(ClientSocket, SD_SEND);
+            if (iResult == SOCKET_ERROR)
+            {
+                printf("shutdown failed with error: %d\n", WSAGetLastError());
+                closesocket(ClientSocket);
+                WSACleanup();
+                return;
+            }
+            count++;
+            continue;
         }
         printf("connection from %s accepted! logged.\n", ip);
 
@@ -135,7 +154,7 @@ void runServer(Args* args)
         }
         count++;
     }
-
+    printf("\nServer shutting down...\n");
     // cleanup
     closesocket(ListenSocket);
     closesocket(ClientSocket);

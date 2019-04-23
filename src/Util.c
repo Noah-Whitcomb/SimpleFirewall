@@ -2,15 +2,14 @@
 
 int acceptIP(Args* args, char* ip)
 {
-    int returnval = 1;
     for(size_t i = 0; i<args->ipListSize; i++)
     {
-        if(strcmp(args->ipList[i], ip) != 0)
+        if(strcmp(args->ipList[i], ip) == 0)
         {
-            returnval = 0;
+            return  1;
         }
     }
-    return returnval;
+    return 0;
 }
 
 //This actually isn't needed because fscanf is apparently a thing
@@ -36,7 +35,29 @@ int getIntFromFile(FILE* f)
         return -100;
     }
     return result;
+}
 
+void freeArgs(Args* args)
+{
+    free(args->ip);
+    //free(args->portList);
+    fclose(args->accList);
+    fclose(args->logFile);
+    for(size_t i = 0; i<args->ipListSize; i++)
+    {
+        free(args->ipList[i]);
+    }
+    free(args->ipList);
+    free(args);
+}
+
+void setDefaultValues(Args* args)
+{
+    args->help = 0;
+//    args->rangeOrList = -100;
+//    args->portLowBound = -100;
+//    args->portUpBound = -100;
+//    args->portListSize = -100;
 }
 
 void printCommandLineArgs(const Args* args)

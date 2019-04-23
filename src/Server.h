@@ -9,6 +9,7 @@
 #include <ctype.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <time.h>
 
 #include "Structs.h"
 #include "Util.h"
