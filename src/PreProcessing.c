@@ -158,9 +158,4 @@ void runHelp()
     printf("\tThe optional \"N\" argument tells the program to write over all information already in the log file, \n");
     printf("\ti.e. start a new log file with the given name. Omitting the \"N\" will append new data to the existing file\n");
     printf("\t This is also needed every time the program is run\n\n");
-    printf("[-range]   This argument denotes that the access control list file will consist of ONE range of \n");
-    printf("\t port values. This range must be written as \"x - y\" where x and y are the (inclusive) upper and\n");
-    printf("\t lower bounds of the range of accepted ports\n\n");
-    printf("[-list]   Using this argument means that the access control list file will consist simply of a list of\n");
-    printf("\t accepted ports separated by spaces. So for example, \"5000 5001 5002\" is acceptable.\n\n");
 }
