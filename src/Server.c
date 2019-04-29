@@ -82,6 +82,12 @@ void runServer(Args* args)
             return;
         }
 
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+
+        fprintf(args->logFile, "#######################\n");
+        fprintf(args->logFile, "Date/Time of connection: %d-%d-%d %d:%d:%d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+
         // check to see if the connection should be shut down
         // assumes connection will be ipv4
         struct sockaddr_in ip_info = (struct sockaddr_in) client_info;
@@ -89,15 +95,9 @@ void runServer(Args* args)
         if (!acceptIP(args, ip))
         {
             printf("connection from %s rejected! attempt logged.\n", ip);
-
-            time_t rawtime;
-            struct tm * timeinfo;
-
-            time ( &rawtime );
-            timeinfo = localtime ( &rawtime );
-            fprintf(args->logFile, "################\nREJECTED connection from: %s\n at %s", ip, asctime(timeinfo));
-            fprintf(args->logFile, " at %s", ip, asctime(timeinfo));
-            //TODO fix time log
+            fprintf(args->logFile, "WARNING: REJECTED connection from %s\n", ip);
+//            fprintf(args->logFile, "################\nREJECTED connection from: %s\n at %s", ip, asctime(timeinfo));
+//            fprintf(args->logFile, " at %s", ip, asctime(timeinfo));
 
             iResult = shutdown(ClientSocket, SD_SEND);
             if (iResult == SOCKET_ERROR)
@@ -111,6 +111,7 @@ void runServer(Args* args)
             continue;
         }
         printf("connection from %s accepted! logged.\n", ip);
+        fprintf(args->logFile, "Connection accepted from %s\n", ip);
 
         // Receive until the peer shuts down the connection
         do
